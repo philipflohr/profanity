@@ -298,8 +298,7 @@ plugins_unload(const char *const name)
         }
         return TRUE;
     }
-    return FALSE;
-    
+    return FALSE;    
 }
 
 void
