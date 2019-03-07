@@ -57,6 +57,7 @@
 #include "command/cmd_ac.h"
 #include "config/accounts.h"
 #include "config/account.h"
+#include "config/files.h"
 #include "config/preferences.h"
 #include "config/theme.h"
 #include "config/tlscerts.h"
@@ -6594,6 +6595,11 @@ cmd_plugins_sourcepath(ProfWin *window, const char *const command, gchar **args)
 gboolean
 cmd_plugins_install(ProfWin *window, const char *const command, gchar **args)
 {
+    GSList* folders = files_get_plugin_source_paths();
+    for (GSList* iterator = folders; iterator; iterator = iterator->next) {
+        cons_show(iterator->data);
+    }
+    cons_show("done");
     char *path = args[1];
     if (path == NULL) {
         char* sourcepath = prefs_get_string(PREF_PLUGINS_SOURCEPATH);

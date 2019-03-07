@@ -45,6 +45,8 @@
 
 static char* _files_get_xdg_config_home(void);
 static char* _files_get_xdg_data_home(void);
+static char* _files_get_global_plugindir_c(void);
+static char* _files_get_global_plugindir_python(void);
 
 void
 files_create_directories(void)
@@ -191,4 +193,56 @@ _files_get_xdg_data_home(void)
 
         return result;
     }
+}
+
+static char*
+_files_get_global_plugindir_c(void)
+{
+    GString *plugindir_c = g_string_new("/usr/lib/profanity/plugins");
+    gchar *result = NULL;
+    if (g_file_test(plugindir_c->str, G_FILE_TEST_IS_DIR))
+    {
+        result = strdup(plugindir_c->str);
+    }
+    g_string_free(plugindir_c, TRUE);
+    return result;
+}
+
+static char*
+_files_get_global_plugindir_python(void)
+{
+    GString *plugindir_python = g_string_new("/usr/share/profanity/plugins");
+    gchar *result = NULL;
+    if (g_file_test(plugindir_python->str, G_FILE_TEST_IS_DIR))
+    {
+        result = strdup(plugindir_python->str);
+    }
+    g_string_free(plugindir_python, TRUE);
+    return result;
+}
+
+GSList*
+files_get_plugin_source_paths(void)
+{
+    GSList *list = NULL;
+    gchar *sourcepath = prefs_get_string(PREF_PLUGINS_SOURCEPATH);
+    if (sourcepath)
+    {
+        list = g_slist_append (list, strdup(sourcepath));
+    }
+    gchar* global_plugindir_c = _files_get_global_plugindir_c();
+    if (global_plugindir_c)
+    {
+        list = g_slist_append (list, strdup(global_plugindir_c));
+    }
+    gchar* global_plugindir_python = _files_get_global_plugindir_python();
+    if (global_plugindir_python)
+    {
+        list = g_slist_append (list, strdup(global_plugindir_python));
+    }
+
+    g_free(sourcepath);
+    g_free(global_plugindir_c);
+    g_free(global_plugindir_python);
+    return list;
 }

@@ -36,6 +36,7 @@
 #define CONFIG_FILES_H
 
 #include <glib.h>
+#include <gmodule.h>
 
 #define FILE_PROFRC "profrc"
 #define FILE_ACCOUNTS "accounts"
@@ -56,6 +57,7 @@ void files_create_directories(void);
 
 char* files_get_config_path(char *config_base);
 char* files_get_data_path(char *data_base);
+GSList* files_get_plugin_source_paths(void);
 
 char* files_get_log_file(void);
 char* files_get_inputrc_file(void);
